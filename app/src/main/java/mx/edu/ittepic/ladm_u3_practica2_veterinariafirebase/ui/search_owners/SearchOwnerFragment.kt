@@ -72,6 +72,7 @@ class SearchOwnerFragment : Fragment() {
 
         binding.btnBuscar.setOnClickListener {
             var busqueda = binding.txtbuscar.text.toString()
+            mostrarFiltro(busqueda,binding.SpConsultasPropietario.selectedItem.toString())
         }
 
         return root
@@ -87,7 +88,7 @@ class SearchOwnerFragment : Fragment() {
             .show()
     }
     fun mostrarFiltro(busqueda:String,filtro:String) {
-        if (filtro != "edad") {
+        if (filtro != "EDAD") {
             baseRemota.collection("PROPIETARIO")
                 .whereEqualTo("${filtro}", busqueda)
                 .addSnapshotListener { query, error ->
@@ -115,7 +116,7 @@ class SearchOwnerFragment : Fragment() {
                         arreglo
                     )
                 }
-        } else if (filtro == "edad") {
+        } else if (filtro == "EDAD") {
             baseRemota.collection("PROPIETARIO")
                 .whereEqualTo("${filtro}", busqueda.toInt())
                 .addSnapshotListener { query, error ->

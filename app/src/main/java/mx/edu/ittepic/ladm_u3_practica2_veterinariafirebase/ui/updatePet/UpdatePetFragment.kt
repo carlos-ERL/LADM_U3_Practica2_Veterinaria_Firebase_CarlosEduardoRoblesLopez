@@ -42,27 +42,7 @@ class UpdatePetFragment : AppCompatActivity() {
 
 
         binding.actualizar.setOnClickListener {
-            /*
-            try {
-                mascota.nombre = binding.txtnombreMascota.text.toString()
-                mascota.raza = binding.SpRaza.selectedItem.toString()
-                mascota.curp = binding.txtcurp.text.toString()
-            } catch (e:Exception) {
-                mensaje("HAY CAMPOS VACIOS")
-                return@setOnClickListener
-            }
 
-
-            try {
-                if (!(mascota.curp == "" || mascota.nombre == "")) {
-                    mascota.actualizar(id_mascota)
-                    limpiarCampos()
-                    finish()
-                }
-            }  catch(e:Exception) {
-                mensaje("HAY CAMPOS VACIOS")
-            }
-            * */
         }
     }
 

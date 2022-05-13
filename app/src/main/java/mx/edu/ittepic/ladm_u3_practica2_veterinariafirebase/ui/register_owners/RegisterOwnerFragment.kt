@@ -59,6 +59,62 @@ class RegisterOwnerFragment : Fragment() {
             }
         }
         binding.insertar.setOnClickListener {
+            val curp = binding.ownerCurp.text.toString()
+            val nombre = binding.ownerName.text.toString()
+            val telefono = binding.ownerPhone.text.toString()
+            val edad = binding.ownerAge.text.toString()
+
+            val regex = "^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$".toRegex()
+
+            if (!(curp == "" || nombre == "" || telefono == "" || edad == "")) {
+                if (!regex.containsMatchIn(curp)) {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("CURP")
+                        .setMessage("NO CUMPLE CON LOS PARAMETROS DE UNA CURP")
+                        .setNeutralButton("ACEPTAR") {d,i -> }
+                        .show()
+
+                } else if(!(telefono.length == 10)) {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("TELEFONO")
+                        .setMessage("EL NÚMERO DEBEN SER 10 DIGITOS")
+                        .setNeutralButton("ACEPTAR") {d,i -> }
+                        .show()
+                } else {
+                    val datos = hashMapOf( // le pasamos los valores primarios que van a tener
+                        "CURP" to curp,
+                        "NOMBRE" to nombre,
+                        "TELEFONO" to telefono,
+                        "EDAD" to edad.toInt()
+                    )
+                    baseRemota.collection("PROPIETARIO") // es como una tabla
+                        .add(datos)
+                        .addOnSuccessListener {
+                            // SI SE PUDO
+                            AlertDialog.Builder(requireContext())
+                                .setTitle("ATENCIÓN")
+                                .setMessage("EXITO! SI SE INSERTO")
+                                .setNeutralButton("ACEPTAR") {d,i -> }
+                                .show()
+                        }
+                        .addOnFailureListener {
+                            // NO SE PUDO
+                            AlertDialog.Builder(requireContext())
+                                .setTitle("Alerta")
+                                .setMessage(it.message!!)
+                                .setNeutralButton("ACEPTAR") {d,i -> }
+                                .show()
+                        }
+                    limpiarCampos()
+                }
+            } else {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("ATENCIÓN")
+                    .setMessage("HAY CAMPOS VACIOS")
+                    .setNeutralButton("ACEPTAR") {d,i -> }
+                    .show()
+            }
+
 
         }
         return root
@@ -84,9 +140,6 @@ class RegisterOwnerFragment : Fragment() {
         binding.ownerName.setText("")
         binding.ownerPhone.setText("")
         binding.ownerAge.setText("")
-        binding.insertar.setHint("REGISTRAR")
-        binding.insertar.setText("REGISTRAR")
-        updateFlag = 0
 
     }
 
