@@ -1,26 +1,30 @@
-package mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase.ui.search_pets
+package mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase.ui.register_owners
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
-import mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase.R
-import mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase.databinding.FragmentSearchPetsBinding
+import mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase.databinding.FragmentRegisterOwnerBinding
 
-class SearchPetFragment : Fragment() {
+class RegisterOwnerFragment : Fragment() {
+    private var _binding: FragmentRegisterOwnerBinding? = null
+    var listaIDs = ArrayList<String>()
+    var curp = ""
+    var updateFlag = 0
+
     var baseRemota = FirebaseFirestore.getInstance()
     var listaID = ArrayList<String>()
     val arreglo = ArrayList<String>()
-    private var _binding: FragmentSearchPetsBinding? = null
 
+    // This property is only valid between onCreateView and
+    // onDestroyView.
     private val binding get() = _binding!!
-
-    var listaIDs = ArrayList<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,8 +32,10 @@ class SearchPetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentSearchPetsBinding.inflate(inflater, container, false)
-        baseRemota.collection("MASCOTA").addSnapshotListener { query, error ->
+        _binding = FragmentRegisterOwnerBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        baseRemota.collection("PROPIETARIO").addSnapshotListener { query, error ->
             if(error!=null){
                 //si hubo error!!!
                 AlertDialog.Builder(requireContext())
@@ -41,34 +47,26 @@ class SearchPetFragment : Fragment() {
             listaID.clear()
             for(documento in query!!){
                 var cadena = "Nombre: ${documento.getString("NOMBRE")}\n" +
-                        "Raza: ${documento.getString("RAZA")}\n"
+                        "Telefono: ${documento.getString("TELEFONO")}\n" +
+                        "Edad: ${documento.getLong("EDAD")}"
                 arreglo.add(cadena)
                 listaID.add(documento.id.toString())
             }
-            binding.pets.adapter = ArrayAdapter<String>(requireContext(),
+            binding.owners.adapter = ArrayAdapter<String>(requireContext(),
                 android.R.layout.simple_list_item_1,arreglo)
-            binding.pets.setOnItemClickListener { adapterView, view, index, l ->
+            binding.owners.setOnItemClickListener { adapterView, view, index, l ->
                 dialogoEliminaActualiza(index)
             }
         }
-        val root: View = binding.root
+        binding.insertar.setOnClickListener {
 
-        val spinner: Spinner = binding.SpConsultasMascotas
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.buscarMascota,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
         }
+        return root
+    }
 
-
-        binding.btnBuscar.setOnClickListener {
-            var busqueda = binding.buscarMascota.text.toString()
-        }
-
-        return  root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     private fun dialogoEliminaActualiza(index: Int) {
         var idElegido = listaID.get(index)
@@ -80,11 +78,21 @@ class SearchPetFragment : Fragment() {
             .setNegativeButton("CANCELAR") {d,i ->}
             .show()
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+
+    fun limpiarCampos() {
+        binding.ownerCurp.setText("")
+        binding.ownerName.setText("")
+        binding.ownerPhone.setText("")
+        binding.ownerAge.setText("")
+        binding.insertar.setHint("REGISTRAR")
+        binding.insertar.setText("REGISTRAR")
+        updateFlag = 0
+
     }
 
+    override fun onResume() {
+        super.onResume()
 
+    }
 }
 

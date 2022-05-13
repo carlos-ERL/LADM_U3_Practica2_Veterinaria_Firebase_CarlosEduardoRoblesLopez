@@ -2,12 +2,50 @@
     <string name="app_name">LADM_U3_Practica2_VeterinariaFirebase</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="nav_header_title">Carlos Eduardo Robles Lopez</string>
+    <string name="nav_header_subtitle">caedrobleslo@ittepic.edu.mx</string>
+    <string name="action_settings">Ajustes</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_home">Inicio</string>
+    <string name="menu_search_pet">Buscar Mascotas</string>
+    <string name="menu_search_owner">Buscar Clientes</string>
+    <string name="menu_register_pet">Registrar Mascota</string>
+    <string name="menu_register_owner">Registrar Cliente</string>
+    <string-array name="buscarProPor">
+        <item>CURP</item>
+        <item>NOMBRE</item>
+        <item>TELEFONO</item>
+        <item>EDAD</item>
+    </string-array>
+
+    <string-array name="razas">
+        <item>Perro</item>
+        <item>Gato</item>
+        <item>Conejo</item>
+        <item>Tortuga</item>
+        <item>Gallina</item>
+        <item>Vaca</item>
+        <item>Oveja</item>
+        <item>Ave</item>
+        <item>Pez</item>
+    </string-array>
+    <array name="raza">
+        <item>Perro</item>
+        <item>Gato</item>
+        <item>Conejo</item>
+        <item>Tortuga</item>
+        <item>Gallina</item>
+        <item>Vaca</item>
+        <item>Oveja</item>
+        <item>Ave</item>
+        <item>Pez</item>
+    </array>
+    ¿
+
+
+    <string-array name="buscarMascota">
+        <item>NOMBRE MASCOTA</item>
+        <item>PROPIETARIO(curp)</item>
+        <item>RAZA</item>
+    </string-array>
 </resources>
