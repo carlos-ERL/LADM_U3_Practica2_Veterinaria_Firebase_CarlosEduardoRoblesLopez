@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,7 +47,7 @@ class SearchOwnerFragment : Fragment() {
             for(documento in query!!){
                 var cadena = "Nombre: ${documento.getString("NOMBRE")}\n" +
                         "Telefono: ${documento.getString("TELEFONO")}\n" +
-                        "Edad: ${documento.getLong("EDAD")}"
+                        "Edad: ${documento.getString("EDAD")}"
                 arreglo.add(cadena)
                 listaID.add(documento.id.toString())
             }
@@ -82,11 +83,29 @@ class SearchOwnerFragment : Fragment() {
 
         AlertDialog.Builder(requireContext()).setTitle("ATENCION!").
         setMessage("¿Que deseas hacer con \n ${arreglo.get(index)}?")
-            .setPositiveButton("ELIMINAR"){d,i -> }
+            .setPositiveButton("ELIMINAR"){d,i ->
+                eliminarPropietario(idElegido)}
             .setNeutralButton("ACTUALIZAR") {d,i -> }
             .setNegativeButton("CANCELAR") {d,i ->}
             .show()
     }
+
+    fun eliminarPropietario(idElegido: String) {
+        baseRemota
+            .collection("PROPIETARIO")
+            .document(idElegido)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(),"SE ELIMINO CON EXITO", Toast.LENGTH_LONG)
+                    .show()
+            }
+            .addOnFailureListener {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("ERROR: ${it.message!!}")
+                    .show()
+            }
+    }
+
     fun mostrarFiltro(busqueda:String,filtro:String) {
         if (filtro != "EDAD") {
             baseRemota.collection("PROPIETARIO")

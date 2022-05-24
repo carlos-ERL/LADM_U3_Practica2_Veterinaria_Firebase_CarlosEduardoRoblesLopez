@@ -48,7 +48,7 @@ class RegisterOwnerFragment : Fragment() {
             for(documento in query!!){
                 var cadena = "Nombre: ${documento.getString("NOMBRE")}\n" +
                         "Telefono: ${documento.getString("TELEFONO")}\n" +
-                        "Edad: ${documento.getLong("EDAD")}"
+                        "Edad: ${documento.getString("EDAD")}"
                 arreglo.add(cadena)
                 listaID.add(documento.id.toString())
             }
@@ -64,17 +64,8 @@ class RegisterOwnerFragment : Fragment() {
             val telefono = binding.ownerPhone.text.toString()
             val edad = binding.ownerAge.text.toString()
 
-            val regex = "^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$".toRegex()
-
             if (!(curp == "" || nombre == "" || telefono == "" || edad == "")) {
-                if (!regex.containsMatchIn(curp)) {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("CURP")
-                        .setMessage("NO CUMPLE CON LOS PARAMETROS DE UNA CURP")
-                        .setNeutralButton("ACEPTAR") {d,i -> }
-                        .show()
-
-                } else if(!(telefono.length == 10)) {
+                if(!(telefono.length == 10)) {
                     AlertDialog.Builder(requireContext())
                         .setTitle("TELEFONO")
                         .setMessage("EL NÚMERO DEBEN SER 10 DIGITOS")
@@ -85,7 +76,7 @@ class RegisterOwnerFragment : Fragment() {
                         "CURP" to curp,
                         "NOMBRE" to nombre,
                         "TELEFONO" to telefono,
-                        "EDAD" to edad.toInt()
+                        "EDAD" to edad
                     )
                     baseRemota.collection("PROPIETARIO") // es como una tabla
                         .add(datos)
@@ -129,10 +120,25 @@ class RegisterOwnerFragment : Fragment() {
 
         AlertDialog.Builder(requireContext()).setTitle("ATENCION!").
         setMessage("¿Que deseas hacer con \n ${arreglo.get(index)}?")
-            .setPositiveButton("ELIMINAR"){d,i -> }
+            .setPositiveButton("ELIMINAR"){d,i -> eliminarPropietario(idElegido)}
             .setNeutralButton("ACTUALIZAR") {d,i -> }
             .setNegativeButton("CANCELAR") {d,i ->}
             .show()
+    }
+    fun eliminarPropietario(idElegido: String) {
+        baseRemota
+            .collection("PROPIETARIO")
+            .document(idElegido)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(),"SE ELIMINO CON EXITO", Toast.LENGTH_LONG)
+                    .show()
+            }
+            .addOnFailureListener {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("ERROR: ${it.message!!}")
+                    .show()
+            }
     }
 
     fun limpiarCampos() {

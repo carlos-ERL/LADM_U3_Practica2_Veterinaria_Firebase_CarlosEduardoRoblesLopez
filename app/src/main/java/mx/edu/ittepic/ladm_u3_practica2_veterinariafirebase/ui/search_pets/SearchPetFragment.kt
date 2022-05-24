@@ -109,16 +109,12 @@ class SearchPetFragment : Fragment() {
         AlertDialog.Builder(requireContext()).setTitle("ATENCION!").
         setMessage("¿Que deseas hacer con \n ${arreglo.get(index)}?")
             .setPositiveButton("ELIMINAR"){d,i -> eliminarMascota(idElegido)}
-            .setNeutralButton("ACTUALIZAR") {d,i -> actualizar(idElegido)}
+            .setNeutralButton("ACTUALIZAR") {d,i -> }
             .setNegativeButton("CANCELAR") {d,i ->}
             .show()
     }
 
-    private fun actualizar(idElegido: String) {
-        var otraVentana = Intent(requireActivity(),UpdatePetFragment::class.java)
-        otraVentana.putExtra("idElegido", idElegido)
-        startActivity(otraVentana)
-    }
+
 
     private fun eliminarMascota(idSeleccionar: String) {
         baseRemota

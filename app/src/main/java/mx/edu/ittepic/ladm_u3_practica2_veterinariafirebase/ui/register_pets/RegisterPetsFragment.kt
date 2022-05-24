@@ -109,9 +109,6 @@ class RegisterPetsFragment : Fragment() {
                 eliminarMascota(idSeleccionar)
             }
             .setNeutralButton("ACTUALIZAR") {d,i ->
-                val otraVentana = Intent(requireContext(), UpdatePetFragment::class.java)
-                otraVentana.putExtra("idMascota", idSeleccionar)
-                startActivity(otraVentana)
 
             }
             .setNegativeButton("CANCELAR") {d,i -> }

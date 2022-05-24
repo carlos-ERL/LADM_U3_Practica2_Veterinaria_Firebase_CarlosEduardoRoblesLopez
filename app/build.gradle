@@ -33,6 +33,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'mx.edu.ittepic.ladm_u3_practica2_veterinariafirebase'
 }
 
 dependencies {
